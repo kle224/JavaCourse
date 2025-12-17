@@ -65,3 +65,24 @@ Ablauf Einrichtung des Arbeitsplatzes:
 
 	git remote add origin git@github.com:kle224/JavaCourse.git
 	git push -u origin master
+
+
+4. Git Stuff
+	Branch anlegen: git branch -m <branch name>
+	Branch umbenennen: git branch -m <old name> <new name>
+	Branch löschen: git push origin --delete <branch name>
+
+	Branch wechseln: git checkout <new branch>
+
+	Merge: git merge <branch name>
+		=> merges from the <branch name>-branch into your current branch
+		   => merge = combining two development states without losses
+
+	Pull: git pull origin <branch name>
+	Push: git push origin <branch name>
+
+	Checking current branch: git branch || git status
+
+NICE TO KNOW:
+notebook wsl: kle | G!1 | SSH-Phrase benteler
+tower wsl:    noahk | G!1 | SSH-Phrase G!1
