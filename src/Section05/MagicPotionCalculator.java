@@ -1,7 +1,7 @@
 package Section05;
 
 public class MagicPotionCalculator {
-	public static void main(String []args) {
+	public static void run() {
 		int magicEssence = 5, dragonScale = 3, unicornHair = 2;
 		int potionPower = magicEssence * dragonScale + unicornHair;
 		
