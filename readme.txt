@@ -10,7 +10,7 @@ Eclipse IDE Setup
 	=> Befehl für das Pattern suchen oder anlegen
 	so = System.out.println("");
 	sp = System.out.print("");
-	sof = System.out.println(string.format());
+	sof = System.out.print("", );
 
 4. Auto Completion: Window > Preferences > Java > Editor >  Content Assist
 	a) Enable Auto acitvation

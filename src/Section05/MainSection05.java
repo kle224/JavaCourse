@@ -12,6 +12,7 @@ public class MainSection05 {
 //		System.out.println("");
 		
 		BudgetTrackerPlus task02 = new BudgetTrackerPlus();
+		task02.run();
 		
 		
 		/*
