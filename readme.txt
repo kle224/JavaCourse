@@ -68,20 +68,62 @@ Ablauf Einrichtung des Arbeitsplatzes:
 
 
 4. Git Stuff
-	Branch anlegen: git branch -m <branch name>
-	Branch umbenennen: git branch -m <old name> <new name>
-	Branch löschen: git push origin --delete <branch name>
+	Create and switch branch: git switch -c <branch-name>
 
-	Branch wechseln: git checkout <new branch>
+	Fetch all remote branches: git fetch --all --prune
+	    => downloads information about all remote branches without changing local files
 
-	Merge: git merge <branch name>
-		=> merges from the <branch name>-branch into your current branch
-		   => merge = combining two development states without losses
+	Checkout existing remote branch: git switch -c <branch-name> --track origin/<branch-name>
+	    => creates a local branch linked to the remote branch and switches to it
 
-	Pull: git pull origin <branch name>
-	Push: git push origin <branch name>
+	Switch branch: git switch <branch-name>
 
-	Checking current branch: git branch || git status
+	Rename local branch: git branch -m <old-name> <new-name>
+
+	Delete branch (local): git branch -d <branch-name>
+	    => deletes a local branch if it is already merged and safe to remove
+
+	Delete branch (remote): git push origin --delete <branch-name>
+	    => deletes the branch from the remote repository (GitHub)
+
+	Fetch: git fetch
+	    => checks the remote repository for new commits without modifying local code
+
+	Pull: git pull
+	    => fetches new commits from the remote repository and merges them into the current branch
+
+	Push: git push
+	    => uploads local commits to the remote repository
+
+	Merge: git merge <branch-name>
+	    => merges the specified branch into the currently checked-out branch
+
+	Check current state: git status
+	    => shows the current branch and the state of modified, staged, or untracked files
+
+	Check current branch: git branch
+	    => lists all local branches and marks the current one
+
+	Check branch tracking: git branch -vv
+	    => shows local branches and which remote branches they track
+
+	View commit history: git log --oneline
+	    => displays a compact list of recent commits
+
+	View commit history of a branch: git log --oneline <branch-name>
+	    => shows the commit history of a specific branch
+
+	View new remote commits (after fetch): git log work..origin/work
+	    => shows commits that exist remotely but not locally
+
+	View differences (local changes): git diff
+	    => shows uncommitted changes in the working directory
+
+	View differences between local and remote branch: git diff work..origin/work
+	    => shows differences between the local branch and the remote version
+
+	View differences between two branches: git diff master..work
+	    => shows what work contains that master does not
 
 NICE TO KNOW:
 notebook wsl: kle | G!1 | SSH-Phrase benteler
