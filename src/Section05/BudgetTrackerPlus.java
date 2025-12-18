@@ -8,7 +8,8 @@ public class BudgetTrackerPlus {
 		
 		double income; // income
 		double rent, groceries, transportation, entertainment; // expenditures
-		double totalExpense, remaining, percent; // results
+		double totalExpense, remaining, rentPercent, groceriesPercent,
+			   transportationPercent, entertainmentPercent; // results
 		
 		// asking for inputs
 		System.out.print("Hello! :) \nPlease enter your income: ");
@@ -33,7 +34,10 @@ public class BudgetTrackerPlus {
 		// calculations
 		totalExpense = rent + groceries + transportation + entertainment;
 		remaining = income - totalExpense;
-		percent = (totalExpense / income) * 100; 
+		rentPercent = (rent / income) * 100; 
+		groceriesPercent = (groceries / income) * 100; 
+		transportationPercent = (transportation / income) * 100; 
+		entertainmentPercent = (entertainment / income) * 100; 
 		
 		// output
 		System.out.println(String.format("Your totals expanses are: $%.2f", totalExpense));
@@ -46,7 +50,11 @@ public class BudgetTrackerPlus {
 			System.out.println(String.format("After all of your expenditures you loose $%.2f", (-remaining)));
 		}
 		
-		System.out.println(String.format("You spend %.2f%% of your income.", percent));
+		System.out.println("Expanses breakdown:");
+		System.out.println(String.format("\tYou spend %.2f%% of your income for rent.", rentPercent));
+		System.out.println(String.format("\tYou spend %.2f%% of your income for groceries.", groceriesPercent));
+		System.out.println(String.format("\tYou spend %.2f%% of your income transportation.", transportationPercent));
+		System.out.println(String.format("\tYou spend %.2f%% of your income entertainment.", entertainmentPercent));
 		
 		scan.close();
 	}
