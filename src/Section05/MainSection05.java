@@ -14,6 +14,8 @@ public class MainSection05 {
 		BudgetTrackerPlus task02 = new BudgetTrackerPlus();
 		task02.run();
 		
+		RefactoringExample task03 = new RefactoringExample();
+		task03.run();
 		
 		/*
 		 * Hier werden Klassen aus einem anderen Package importiert und dann aufgerufen:
