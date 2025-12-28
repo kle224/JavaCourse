@@ -12,6 +12,7 @@ Eclipse IDE Setup
 	sp = System.out.print("");
 	sof = System.out.printf(""%n, );         // works like "System.out.print(String.format(""), );"
 	Scanner = Scanner scan = new Scanner(System.in);			// currently only on the notebook?!
+	cons = scan.nextLine();				// just to consume the enter after an input which is not a string/complete line
 
 4. Auto Completion: Window > Preferences > Java > Editor >  Content Assist
 	a) Enable Auto acitvation
