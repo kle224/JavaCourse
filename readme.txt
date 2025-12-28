@@ -11,6 +11,7 @@ Eclipse IDE Setup
 	so = System.out.println("");
 	sp = System.out.print("");
 	sof = System.out.printf(""%n, );         // works like "System.out.print(String.format(""), );"
+	Scanner = Scanner scan = new Scanner(System.in);			// currently only on the notebook?!
 
 4. Auto Completion: Window > Preferences > Java > Editor >  Content Assist
 	a) Enable Auto acitvation
