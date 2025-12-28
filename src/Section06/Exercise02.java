@@ -24,9 +24,16 @@ public class Exercise02 {
 			System.out.printf("%d is zero! %n", test);
 		}
 		
-		System.out.println("Please enter your name: ");
+		System.out.print("Please enter your name: ");
 		name = scan.nextLine();
-		System.out.println("name: " + name);
+		
+		if (name.equalsIgnoreCase("Noah")) {
+			System.out.println("Inside 2nd test (if).");
+			System.out.printf("The name \"%s\" is the same as yours.%n", name);
+		} else {
+			System.out.println("Inside 2nd test (else).");
+			System.out.printf("The name \"%s\" is different from yours.%n", name);
+		}
 		
 	}
 }
