@@ -26,7 +26,10 @@ public class MainSection06 {
 //		Exercise07 task08 = new Exercise07();
 //		task08.run();
 		
-		Exercise08 task09 = new Exercise08();
-		task09.run();
+//		Exercise08 task09 = new Exercise08();
+//		task09.run();
+		
+		GalaxyWeatherAdvisor task10 = new GalaxyWeatherAdvisor();
+		task10.run();
 	}
 }
