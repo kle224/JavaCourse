@@ -15,7 +15,7 @@ public class Chatbot {
             String userInput = scanner.nextLine().toLowerCase(); // Read user input
      
             // Step 3: Process user input using conditional statements
-            if (userInput.equalsIgnoreCase("hello") || userInput.equalsIgnoreCase("hi")) {
+            if (userInput.contains("hello") || userInput.contains("hi") || userInput.contains("hey")) {
                 System.out.println("Chatbot: Hello! How can I help you today?");
             } else if (userInput.contains("how are you") || userInput.contains("how is it going")) {
                 System.out.println("Chatbot: I'm just a bot, but I'm here to help you!");
