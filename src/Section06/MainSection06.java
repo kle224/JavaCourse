@@ -20,7 +20,10 @@ public class MainSection06 {
 //		Exercise05 task06 = new Exercise05();
 //		task06.run();
 		
-		Exercise06 task07 = new Exercise06();
-		task07.run();
+//		Exercise06 task07 = new Exercise06();
+//		task07.run();
+		
+		Exercise07 task08 = new Exercise07();
+		task08.run();
 	}
 }
