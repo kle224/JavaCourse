@@ -14,7 +14,13 @@ public class MainSection06 {
 //		Exercise04 task04 = new Exercise04();
 //		task04.run();
 		
-		Chatbot task05 = new Chatbot();
-		task05.run();
+//		Chatbot task05 = new Chatbot();
+//		task05.run();
+		
+//		Exercise05 task06 = new Exercise05();
+//		task06.run();
+		
+		Exercise06 task07 = new Exercise06();
+		task07.run();
 	}
 }
