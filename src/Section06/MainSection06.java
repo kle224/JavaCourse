@@ -8,7 +8,13 @@ public class MainSection06 {
 //		Exercise02 task02 = new Exercise02();
 //		task02.run();
 		
-		Exercise03 task03 = new Exercise03();
-		task03.run();
+//		Exercise03 task03 = new Exercise03();
+//		task03.run();
+		
+//		Exercise04 task04 = new Exercise04();
+//		task04.run();
+		
+		Chatbot task05 = new Chatbot();
+		task05.run();
 	}
 }
