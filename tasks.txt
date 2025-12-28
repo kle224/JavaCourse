@@ -1,0 +1,5 @@
+Tasks:
+
+- look for a Scanner template in eclipse on the tower pc => Change readme ++ rebuild it on the notebook
+
+- look for the autofill option for "import java.util.Scanner;" on the tower pc => Change readme ++ rebuild it on the notebook
