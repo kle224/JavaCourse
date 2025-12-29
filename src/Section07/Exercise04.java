@@ -29,5 +29,7 @@ public class Exercise04 {
 			System.out.println("There is no season like this.");
 			break;
 		}
+
+		scan.close();
 	}
 }

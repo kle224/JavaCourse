@@ -36,5 +36,7 @@ public class Exercise03 {
 			System.out.println("This grade doesn't exist...");
 			break;
 		}
+
+		scan.close();
 	}
 }

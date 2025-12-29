@@ -1,7 +1,5 @@
 package Section07;
 
-import java.util.Scanner;
-
 public class Exercise05 {
 	
 	public enum Day{
