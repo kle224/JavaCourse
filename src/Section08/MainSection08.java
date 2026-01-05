@@ -32,7 +32,10 @@ public class MainSection08 {
 //		Exercise10 task10 = new Exercise10();
 //		task10.run();
 
-		Exercise11 task11 = new Exercise11();
-		task11.run();
+//		Exercise11 task11 = new Exercise11();
+//		task11.run();
+		
+		SimpleCalculator task12 = new SimpleCalculator();
+		task12.run();
 	}
 }
