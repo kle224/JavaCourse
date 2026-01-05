@@ -13,7 +13,7 @@ Eclipse IDE Setup
 	sof = System.out.printf(""%n, );         // works like "System.out.print(String.format(""), );"
 	Scanner = Scanner scan = new Scanner(System.in);			// currently only on the notebook?!
 	cons = scan.nextLine();				// just to consume the enter after an input which is not a string/complete line
-	snl = scan.nextLine();			// works as well after written code in that line. So it could be used for inputs after variable names etc.
+	sn = scan.next${cursor}();			// works as well after written code in that line. So it could be used for inputs after variable names etc. -- has to be "Java" not "Java Statement"!
 	iscan = import java.util.Scanner;	// has to be "java" instead of "java statement"! It won't work otherwise...
 
 4. Auto Completion: Window > Preferences > Java > Editor >  Content Assist
