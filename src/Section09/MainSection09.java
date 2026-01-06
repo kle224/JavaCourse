@@ -14,7 +14,10 @@ public class MainSection09 {
 //		Exercise04 task04 = new Exercise04();
 //		task04.run();
 		
-		Exercise05 task05 = new Exercise05();
-		task05.run();
+//		Exercise05 task05 = new Exercise05();
+//		task05.run();
+		
+		Exercise06 task06 = new Exercise06();
+		task06.run();
 	}
 }
