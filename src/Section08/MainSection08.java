@@ -2,6 +2,8 @@ package Section08;
 
 public class MainSection08 {
 	public static void main (String []argStrings) {
+		// Section Info: Loops - For, while, do-while loops
+		
 //		Exercise01 task01 = new Exercise01();
 //		task01.run();
 		

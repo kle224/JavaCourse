@@ -2,6 +2,8 @@ package Section07;
 
 public class MainSection07 {
 	public static void main (String [] args) {
+		// Section Info: Switch statements and enums in Java
+		
 //		Exercise01 task01 = new Exercise01();
 //		task01.run();
 		

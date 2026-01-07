@@ -2,6 +2,8 @@ package Section09;
 
 public class MainSection09 {
 	public static void main (String []args) {
+		// Section Info: Introduction to Arrays
+		
 //		Exercise01 task01 = new Exercise01();
 //		task01.run();
 		

@@ -2,6 +2,8 @@ package Section06;
 
 public class MainSection06 {
 	public static void main(String []args) {
+		// Section Info: Control Statements - if, else, ternary operators
+		
 //		Exercise01 task01 = new Exercise01();
 //		task01.run();
 		

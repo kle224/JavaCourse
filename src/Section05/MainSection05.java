@@ -5,6 +5,8 @@ import java.net.Socket;
 public class MainSection05 {
 	public static void main (String []args) {
 		
+		// Section Info: Setting up the Java Development Environment
+		
 		// Hier werden Klassen aus dem selben Package aufgerufen
 		
 //		MagicPotionCalculator task01 = new MagicPotionCalculator();
