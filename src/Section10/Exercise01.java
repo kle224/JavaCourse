@@ -31,14 +31,14 @@ public class Exercise01 {
 		}
 		
 		// Accessing a 2D-Array
-		System.out.println("\n---");
+		System.out.println("\n----------------------");
 		int element = nums2[2][1]; // row 3 --- column 2 => output = 8
-		System.out.println("Accessing element: " + element + "\n---\n");
+		System.out.println("Accessing element: " + element + " | \n----------------------");
 		
 		// Modify Elements of a 2D-Array
-		System.out.println("\n---");
+		System.out.println("\n------------------------------");
 		nums2[2][1] = 15; // replacing row 3 --- column 2 => it's now 15 instead of 8
 		System.out.println("Modified element (was " + element + "): " + nums2[2][1] 
-						  + "\n---\n");
+						  + " | \n------------------------------");
 	}
 }
