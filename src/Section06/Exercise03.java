@@ -6,13 +6,15 @@ public class Exercise03 {
 		
 		// Example for nested if-else-statements
 		
-		if (a > 0) {
+		if ( a > 0) {
 			if (b > a) {
 				System.out.println("B is greater than A!");
-			} else if (b == a) {
-				System.out.println("B is equal to A!");
 			} else {
-				System.out.println("B is lesser than A!");
+				if (b == a) {
+					System.out.println("B is equal to A!");
+				} else {
+					System.out.println("B is lesser than A!");
+				}
 			}
 		}
 	}

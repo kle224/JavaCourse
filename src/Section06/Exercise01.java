@@ -1,6 +1,5 @@
 package Section06;
 
-import java.lang.classfile.constantpool.DoubleEntry;
 import java.util.Scanner;
 
 public class Exercise01 {
@@ -18,7 +17,7 @@ public class Exercise01 {
 		// Ternary guide:
 		// type name = condition ? if true : if false;
 		double discount = (age <= 12) ? 0.10 : 0.05;
-		System.out.printf("age: %d years.%n", age);
+		System.out.printf("age: %d years. %n", age);
 		
 		
 		System.out.printf("Discount for age %d is %.2f%%. %n", age, (discount * 100));

@@ -1,6 +1,5 @@
 package Section06;
 
-import java.security.DrbgParameters.NextBytes;
 import java.util.Scanner;
 
 public class Exercise02 {

@@ -6,8 +6,7 @@ public class Exercise04 {
 		int iteration = 1;
 
 		// looping through arrays with a foreach loop
-		// foreach in java is called enhanced for loop
-		System.out.println("qwe");
+		// foreach in java is called enhanced for loop;
 		
 		for (int no : numbers) {
 			// the logic is:
@@ -18,6 +17,8 @@ public class Exercise04 {
 			System.out.printf("Iteration: %02d. --- array element: %d.%n", iteration++, no);
 		}
 		iteration = 1;
+		
+		System.out.println("");
 		
 		String[] friends = {"Nico", "Oliver", "Jonas", "Jan", "Constantin"};
 		
