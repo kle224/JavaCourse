@@ -10,12 +10,14 @@ public class Exercise10 {
 		// fills the entire nums-array with 9s
 		Arrays.fill(nums, 9);
 		
+		System.out.println("nums after 1st fill: " + Arrays.toString(nums));
+		
 		// fills the nums-array elements 0-2 with 10s 
 		Arrays.fill(nums, 0,3,10);
 		// fills the nums-array elements 3-4 with 11s
 		Arrays.fill(nums, 3,5,11);
 		
-		System.out.println("nums: " + Arrays.toString(nums));
+		System.out.println("nums after 2nd fill: " + Arrays.toString(nums));
 		
 		// declaring and initializing a new array with the same values
 		int[] myNums = {10,10,10,11,11};
