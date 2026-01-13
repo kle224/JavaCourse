@@ -47,9 +47,14 @@ public class MainSection10 {
 //		Exercise06 task06 = new Exercise06();
 //		task06.run();
 		
-		System.out.println("7:");
-//		- same as 06, but without the extreme commenting and focused on the exercise
-		Exercise07 task07 = new Exercise07();
-		task07.run();
+//		System.out.println("7:");
+//		// - same as 06, but without the extreme commenting and focused on the exercise
+//		Exercise07 task07 = new Exercise07();
+//		task07.run();
+
+		System.out.println("8:");
+		// - 
+		Exercise08 task08 = new Exercise08();
+		task08.run();
 	}
 }
