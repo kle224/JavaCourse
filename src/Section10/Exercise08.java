@@ -1,6 +1,6 @@
 package Section10;
 
-import java.util.ArrayList;
+import java.util.ArrayList; // import this to accessing the ArrayList-Class
 
 public class Exercise08 {
 	public static void run() {

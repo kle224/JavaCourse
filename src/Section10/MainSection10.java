@@ -52,9 +52,19 @@ public class MainSection10 {
 //		Exercise07 task07 = new Exercise07();
 //		task07.run();
 
-		System.out.println("8:");
-		// - 
-		Exercise08 task08 = new Exercise08();
-		task08.run();
+//		System.out.println("8:");
+//		// - introduction to ArrayList with all of the commonly used Methods
+//		Exercise08 task08 = new Exercise08();
+//		task08.run();
+		
+//		System.out.println("9:");
+//		// - further demonstrations of the same content as in E08
+//		Exercise09 task09 = new Exercise09();
+//		task09.run();
+		
+		System.out.println("10:");
+		// - big exercise with all content from the course till now
+		Exercise10 task10 = new Exercise10();
+		task10.run();
 	}
 }
