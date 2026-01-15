@@ -2,25 +2,26 @@ package Section11;
 
 public class MainSection11 {
 	public static void main(String []args) {
-		System.out.println("1:");
-		// - first introduction to the usage of methods in the same class
-		Exercise01 task01 = new Exercise01();
-		task01.run();
+//		System.out.println("1:");
+//		// - first introduction to the usage of void methods without parameters in the same class
+//		Exercise01 task01 = new Exercise01();
+//		task01.run();
 
 //		System.out.println("2:");
-//		// - 
-//		Exercise0 task02 = new Exercise02();
+//		// - demonstrate the usage of void methods that work with parameters
+//		Exercise02 task02 = new Exercise02();
 //		task02.run();
 
 //		System.out.println("3:");
-//		// - 
+//		// - demonstrates passing inputs as parameters into void methods
 //		Exercise03 task03 = new Exercise03();
 //		task03.run();
 
-//		System.out.println("4:");
-//		// - 
-//		Exercise04 task04 = new Exercise04();
-//		task04.run();
+		System.out.println("4:");
+		// - demonstrates passing of values and references into void methods
+		// - showing the difference between "pass by value" and "pass by reference"
+		Exercise04 task04 = new Exercise04();
+		task04.run();
 
 //		System.out.println("5:");
 //		// - 
