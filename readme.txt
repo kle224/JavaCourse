@@ -20,9 +20,10 @@ Eclipse IDE Setup
 	a) Enable Auto acitvation
 	b) Set delay to 100ms
 	c) paste in field "Auto activation triggers for Java:": ._abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+	d) Enable the checkbox for "Disable insertion triggers except 'Enter'"		=> important! otherwise the advanced settings block simple data types etc...
    move to: Window > Preferences > Java > Editor > Content Assist > Advanced
-	d) make sure that the marks for "Java Type Proposals" are set			=> that's important for all commonly used autofills (incl. all created templates!)
-	e) make sure that the marks for "Java Proposals ( Task-Focussed)" are unset	=> that's the "String nameString" instead of "String name" crap!
+	e) make sure that the marks for "Java Type Proposals" are set			=> that's important for all commonly used autofills (incl. all created templates!)
+	f) make sure that the marks for "Java Proposals ( Task-Focussed)" are unset	=> that's the "String nameString" instead of "String name" crap!
 
 
 

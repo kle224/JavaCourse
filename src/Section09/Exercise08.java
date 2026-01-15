@@ -6,7 +6,7 @@ public class Exercise08 {
 	public static void run() {
 		// declare and initialize an int array and a variable for a searched value
 		int[] nums = {2,5,1,3,4,7,3,8};
-		int searched = 5;
+		int searched = 9; // 5
 		
 		Arrays.sort(nums);
 		int index = Arrays.binarySearch(nums, searched);

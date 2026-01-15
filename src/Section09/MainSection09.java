@@ -36,15 +36,15 @@ public class MainSection09 {
 //		Exercise06 task06 = new Exercise06();
 //		task06.run();
 		
-//		System.out.println("7:");
-//		// - demonstrates how the Arrays.sort Method works for number and string arrays
-//		Exercise07 task07 = new Exercise07();
-//		task07.run();
+		System.out.println("7:");
+		// - demonstrates how the Arrays.sort Method works for number and string arrays
+		Exercise07 task07 = new Exercise07();
+		task07.run();
 		
-//		System.out.println("8:");
-//		// - demonstrates binary search Method for a sorted integer array
-//		Exercise08 task08 = new Exercise08();
-//		task08.run();
+		System.out.println("8:");
+		// - demonstrates binary search Method for a sorted integer array
+		Exercise08 task08 = new Exercise08();
+		task08.run();
 		
 //		System.out.println("9:");
 //		// - demonstrates the usage of the Arrays.copyOf Method
@@ -52,9 +52,9 @@ public class MainSection09 {
 //		Exercise09 task09 = new Exercise09();
 //		task09.run();
 		
-		System.out.println("10:");
-		// - demonstrate the Arrays.fill and Array.equals Method
-		Exercise10 task10 = new Exercise10();
-		task10.run();
+//		System.out.println("10:");
+//		// - demonstrate the Arrays.fill and Array.equals Method
+//		Exercise10 task10 = new Exercise10();
+//		task10.run();
 	}
 }
