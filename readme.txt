@@ -11,10 +11,10 @@ Eclipse IDE Setup
 	so = System.out.println("");
 	sp = System.out.print("");
 	sof = System.out.printf(""%n, );         // works like "System.out.print(String.format(""), );"
-	Scanner = Scanner scan = new Scanner(System.in);			// currently only on the notebook?!
+	scan = scan = new Scanner(System.in);		// Has to be "Java"! => Type "Scanner" with autofill 1st to import the class, than "scan" with autofill to complete the statement for an object
 	cons = scan.nextLine();				// just to consume the enter after an input which is not a string/complete line
 	sn = scan.next${cursor}();			// works as well after written code in that line. So it could be used for inputs after variable names etc. -- has to be "Java" not "Java Statement"!
-	iscan = import java.util.Scanner;	// has to be "java" instead of "java statement"! It won't work otherwise...
+	rnd = rnd = new Random();			// has to be "Java"! => Type "Random" with autofill 1st to import the class, than "rnd" with autofill to complete the statement for an object
 
 4. Auto Completion: Window > Preferences > Java > Editor >  Content Assist
 	a) Enable Auto acitvation

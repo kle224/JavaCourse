@@ -17,26 +17,26 @@ public class MainSection11 {
 //		Exercise03 task03 = new Exercise03();
 //		task03.run();
 
-		System.out.println("4:");
-		// - demonstrates passing of values and references into void methods
-		// - showing the difference between "pass by value" and "pass by reference"
-		Exercise04 task04 = new Exercise04();
-		task04.run();
+//		System.out.println("4:");
+//		// - demonstrates passing of values and references into void methods
+//		// - showing the difference between "pass by value" and "pass by reference"
+//		Exercise04 task04 = new Exercise04();
+//		task04.run();
 
 //		System.out.println("5:");
-//		// - 
+//		// - demonstrates returning Methods with int values
 //		Exercise05 task05 = new Exercise05();
 //		task05.run();
 
 //		System.out.println("6:");
-//		// - 
+//		// - create and use random numbers
 //		Exercise06 task06 = new Exercise06();
 //		task06.run();
 
-//		System.out.println("7:");
-//		// - 
-//		Exercise07 task07 = new Exercise07();
-//		task07.run();
+		System.out.println("7:");
+		// - 
+		Exercise07 task07 = new Exercise07();
+		task07.run();
 
 //		System.out.println("8:");
 //		// - 

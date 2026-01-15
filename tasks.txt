@@ -3,3 +3,10 @@ Tasks:
 - look for a Scanner template in eclipse on the tower pc => Change readme ++ rebuild it on the notebook
 
 - look for the autofill option for "import java.util.Scanner;" on the tower pc => Change readme ++ rebuild it on the notebook
+
+---------
+
+Date: 15.01.26: do for the Tower:
+- rewrite "Scanner" Template => to use the Build-In-Template which imports the class!
+- change it to "scan" in the "Java"-Format! => use the Build-in-Scanner-Template to import the class, press space, enter "scan", press autofill => creates an object!!
+--> DO THE SAME FOR "Random" with "rnd" to fill the row with "rnd = new Random();", this will create a Random-Object.
