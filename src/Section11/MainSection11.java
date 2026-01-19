@@ -1,5 +1,7 @@
 package Section11;
 
+import java.net.Socket;
+
 public class MainSection11 {
 	public static void main(String []args) {
 //		System.out.println("1:");
@@ -38,9 +40,13 @@ public class MainSection11 {
 //		Exercise07 task07 = new Exercise07();
 //		task07.run();
 
-		System.out.println("8:");
-		// - validate an email address
-		Exercise08 task08 = new Exercise08();
-		task08.run();
+//		System.out.println("8:");
+//		// - validate an email address
+//		Exercise08 task08 = new Exercise08();
+//		task08.run();
+		
+		System.out.println("Test 8:");
+		Test08 task09 = new Test08();
+		task09.run();
 	}
 }
