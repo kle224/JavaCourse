@@ -1,28 +1,57 @@
 package Section11;
 
-// Was brauchen wir alles?
-// Mail splitten
-// Nach "@" und "." suchen
-// sicherstellen, dass bestimmte Zeichen ("@") nur einmal vorkommen
+import java.util.Scanner;
+
 
 public class Test08 {
 	public static void run() {
-		String eMail = "noah@mail.com";
+		boolean check = true;
 		
-		boolean isValid = validate(eMail);
-		System.out.println("Mail is valid: " + isValid);
+		Scanner scan = new Scanner(System.in);
+		
+		while (check) {
+			System.out.print("Please enter your e-mail: ");
+			String email = scan.nextLine();
+			
+			boolean isValid = validate(email);
+			
+			if (isValid) {
+				System.out.println("Your mail is valid!");
+				check = false;
+			} else {
+				System.out.println("Your mail isn't valid. Please try it again or quit.");
+				System.out.print("Press any key + Enter to try it again or \"x\" to quit: ");
+				check = cont(scan.nextLine(), "x");
+			}
+		}
 	}
 	
 	public static boolean validate(String eMail) {
 		Mail check1 = searchAt(eMail, "@");
 		
 		if (check1.bool) {
-			Mail splitted = splitMail(eMail, "@");
+			Mail check2 = searchItem(eMail, " ");
 			
-			Mail check2 = searchItem(splitted.part2, ".");
-			
-			if (check2.bool) {
-				return true;
+			if (!check2.bool) { // false muss hier richtig sein, kein Space erlaubt!
+				Mail splitted = splitMail(eMail, "@");
+				
+				if (splitted.part1.length() > 0) { // check if part1 has at least 1 character
+					Mail check3 = searchItem(splitted.part2, ".");
+					
+					if (check3.bool) { // check if part2 has at least 1 dot
+						Mail check4 = checkIndex(splitted.part2, "."); // should be false!
+						
+						if (!check4.bool) {
+							return true;
+						} else {
+							return false;
+						}
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
 			} else {
 				return false;
 			}
@@ -30,11 +59,6 @@ public class Test08 {
 			return false;
 		}
 	}
-	
-	
-	
-	
-	
 	
 	
 	// Teilaufgabe: "@" suchen und validieren, ob es nur eins ist
@@ -55,38 +79,32 @@ public class Test08 {
 		}
 		
 		if (isThere) {
-			if (itemCounter == 1) {
-				System.out.println("Only 1 \"@\"!");
-				return new Mail(true, itemCounter, index); // returns bool = true, number (count of @s) and index = i
-			} else {
-				System.out.println("There are too many \"@\"s.");
-				return new Mail(false);
+			if (itemCounter == 1) { // case 1 @
+				return new Mail(true, "none"); // returns bool = true, number (count of @s) and index = i
+			} else { // case more than 1 @
+				return new Mail(false, "@>0");
 			}
-		} else {
-			System.out.println("There is no \"@\".");
-			return new Mail(false);
+		} else { // case less than 1 @
+			return new Mail(false, "@=0");
 		}
 	}
 	
-	// Teilaufgabe: Item (".") suchen
-	public static Mail searchItem(String part2, String item) {
-		char[] elements = part2.toCharArray();
+	// Teilaufgabe: Item (".", " ") suchen
+	public static Mail searchItem(String content, String item) {
+		char[] elements = content.toCharArray();
 		boolean isThere = false;
+		String problem = "elementNE";
 		
 		for (char element : elements) {
 			if (item.equals(Character.toString(element))) {
 				isThere = true;
+				problem = "elementE";
 			}
 		}
 		
-		return new Mail(isThere);
+		return new Mail(isThere, problem);
 	}
-	
-	// Teilaufgabe: prüfen, ob im Teil hinter dem @ mindestens ein "." ist
-	public static Mail searchDot(String part2, String item) {
-		return new Mail();
-	}
-	
+	 
 	// Teilaufgabe: beim "@" splitten
 	public static Mail splitMail(String eMail, String character) {
 		String[] parts = eMail.split(character);
@@ -95,36 +113,54 @@ public class Test08 {
 		
 		return new Mail(part1, part2);
 	}
+	
+	// Teilaufgabe: prüfen ob der erste oder letzte Slot ein bestimmtes Zeichen (".") ist
+	public static Mail checkIndex(String content, String item) {
+		char[] elements = content.toCharArray();
+		Mail indices = new Mail(false, "none");
+		
+		
+		for (int i = 0; i < elements.length; i++) {
+			if (i == 0 || i == (elements.length - 1)) {
+				if (item.equals(Character.toString(elements[i]))) {
+					indices.bool = true;
+					indices.problem = "indexErr";
+				}
+			}
+		}
+		
+		return indices;
+	}
+	
+	// returns a boolean true if input matches targetState
+	public static boolean cont(String input, String targetState) {
+		if (input.equalsIgnoreCase(targetState)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }
 
 
 // Object Mail
 class Mail {
 	int number, index;
-	String part1, part2, complete;
+	String part1, part2, problem;
 	boolean bool;
-	
-	Mail(boolean bool, int index) {
-		this.bool = bool;
-		this.index = index;
-	}
-	
-	Mail(boolean bool, int number, int index) {
-		this.bool = bool;
-		this.number = number;
-		this.index = index;
-	}
 	
 	Mail(String part1, String part2) {
 		this.part1 = part1;
 		this.part2 = part2;
 	}
 	
-	Mail (boolean bool) {
+	Mail (boolean bool, String problem) {
 		this.bool = bool;
-	}
-	
-	// empty object for easy coding
-	Mail() {
+		this.problem = problem;
 	}
 }
+
+
+// Idee für später:
+// Object-String "problem" implementiert => Switch Statement schreiben, das mit diesem Wert
+// analysiert, wo der Fehler liegt.
