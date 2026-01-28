@@ -9,19 +9,16 @@ public class MainSection05 {
 
 //		System.out.println("1:");
 //		// - shows the usage of String.format inside of "System.out.println"
-//		MagicPotionCalculator task01 = new MagicPotionCalculator();
-//		task01.run();
+//		MagicPotionCalculator.run();
 
 //		System.out.println("2:");
 //		// - fills different variables with user input and calculating with them
 //		// - prints the result based on the value amount
-//		BudgetTrackerPlus task02 = new BudgetTrackerPlus();
-//		task02.run();
+//		BudgetTrackerPlus.run();
 
 		System.out.println("3:");
 		// - just a few variables to try out refactoring
-		RefactoringExample task03 = new RefactoringExample();
-		task03.run();
+		RefactoringExample.run();
 		
 		/*
 		 * Hier werden Klassen aus einem anderen Package importiert und dann aufgerufen:
@@ -35,6 +32,9 @@ public class MainSection05 {
 		 * 
 		 * 		MagicPotionCalculator calculator = new MagicPotionCalculator();
 		 * 		calculator.run();
+		 * 
+		 * 		// ODER BEI STATISCHEN METHODEN:
+		 * 		MagicPotionCalculator.run();
 		 * 	}
 		 * }
 		 */

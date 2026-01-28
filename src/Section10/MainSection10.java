@@ -9,32 +9,27 @@ public class MainSection10 {
 //		// - declaring and initializing 2d-arrays
 //		// - iterating through 2d-arrays with for loops and enhanced for loops
 //		// - accessing and modifying elements of a 2d-array
-//		Exercise01 task01 = new Exercise01();
-//		task01.run();
+//		Exercise01.run();
 
 //		System.out.println("2:");
 //		// - declaring a 2d-array with 4 rows and 3 columns
 //		// - assign a value for each index and print all elements
-//		Exercise02 task02 = new Exercise02();
-//		task02.run();
+//		Exercise02.run();
 
 //		System.out.println("3:");
 //		// - declaring and initializing a 2d-array and iterating all elements with a foreach loop
-//		Exercise03 task03 = new Exercise03();
-//		task03.run();
+//		Exercise03.run();
 
 //		System.out.println("4:");
 //		 // - declaring and initializing a 2d-array and int variables for the greatest and lowest number
 //		 // - building nested foreach loops to iterate through the array and reassign the variables for
 //		 //   the greatest and lowest number if they're bigger or smaller than before
-//		Exercise04 task04 = new Exercise04();
-//		task04.run();
+//		Exercise04.run();
 
 //		System.out.println("5:");
 //		// - declaring and initializing a 2d-array and an int variable for the sum
 //		// - iterating through the array and sums up each element of the array
-//		Exercise05 task05 = new Exercise05();
-//		task05.run();
+//		Exercise05.run();
 		
 //		System.out.println("6:");
 //		// - creating a 2d-array based on user input
@@ -44,27 +39,22 @@ public class MainSection10 {
 //		// xox		1st row
 //		// oxo		2nd row
 //		// xox		3rd row
-//		Exercise06 task06 = new Exercise06();
-//		task06.run();
+//		Exercise06.run();
 		
 //		System.out.println("7:");
 //		// - same as 06, but without the extreme commenting and focused on the exercise
-//		Exercise07 task07 = new Exercise07();
-//		task07.run();
+//		Exercise07.run();
 
 //		System.out.println("8:");
 //		// - introduction to ArrayList with all of the commonly used Methods
-//		Exercise08 task08 = new Exercise08();
-//		task08.run();
+//		Exercise08.run();
 		
 //		System.out.println("9:");
 //		// - further demonstrations of the same content as in E08
-//		Exercise09 task09 = new Exercise09();
-//		task09.run();
+//		Exercise09.run();
 		
 		System.out.println("10:");
 		// - big exercise with all content from the course till now
-		Exercise10 task10 = new Exercise10();
-		task10.run();
+		Exercise10.run();
 	}
 }
