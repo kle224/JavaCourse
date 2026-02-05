@@ -2,36 +2,24 @@ package Section12;
 
 public class MainSection12 {	// Recursive Methods
 	public static void main(String []args) {
-		System.out.println("01:");
-		// - 
-		Exercise01.run();
+//		System.out.println("01:");
+//		// - recursive fibonacci calculator
+//		Exercise01.run();
 		
 //		System.out.println("02:");
-//		// -
+//		// - recursive factorial calculator
 //		Exercise02.run();
 
 //		System.out.println("03:");
-//		// -
+//		// - atbash decoder/encoder
 //		Exercise03.run();
 
 //		System.out.println("04:");
-//		// -
+//		// - Method Call Stack demonstration
 //		Exercise04.run();
 
-//		System.out.println("05:");
-//		// -
-//		Exercise05.run();
-
-//		System.out.println("06:");
-//		// -
-//		Exercise06.run();
-
-//		System.out.println("07:");
-//		// -
-//		Exercise07.run();
-
-//		System.out.println("08:");
-//		// -
-//		Exercise08.run();
+		System.out.println("05:");
+		// - Magic Mirror Excercise
+		Exercise05.run();
 	}
 }
