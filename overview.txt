@@ -1,0 +1,1109 @@
+SN4J Stand 11.03.2026
+
+Class: TestMain
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J;
+
+import de.schoenn.ServiceNow4J.CMDB.ConfigurationItem;
+
+public class TestMain {
+	public static void main(String[] args) throws APIException {
+		ServiceNow sn = new ServiceNow(
+				"Placeholder",
+				"Placeholder",
+				"Placeholder");	
+		
+//		// 1. create incident
+//		Incident inc = sn.createIncident(
+//				"Test incident from SN-SDK",
+//				"This is a test incident created by the Java SN-SDK",
+//				new ConfigurationItem("9cba3f371b3c6c10d270a97ce54bcb07"),
+//				new AssignmentGroup("9cba3f371b3c6c10d270a97ce54bcb07"), // sys_id
+//				Impact.MEDIUM,
+//				Urgency.MEDIUM,
+//				"Placeholder");					// sys_id_caller => technical user
+//		
+//		System.out.println("Created incident: " + inc.getIncNumber());
+//		
+//		// 2. add worknote
+//		sn.addWorkNote(inc.getSysID(), "adding a worknote with the Java SN-SDK");
+//		
+//		// 3. reopen incient
+//		sn.reopenIncident(inc.getSysID(), "Reopen an incident with the Java SN-SDK for a test");
+//		
+//		// 4. call incident
+//		Incident fetched = sn.getIncident("97d999a0c3c37a10b6fcd5001501313b");
+//		System.out.println("Fetched incident " + fetched);
+//
+//		// 5. get incident
+//    	sn.getIncident("e8f87938c347fe10907af21f05013185");
+//    	
+    	// 6. get a List of all Linux servers
+    	var servers = sn.getLinuxServers("", 3); // no filters, max 10
+    	System.out.println("Found Linux CIs: " + servers.size());
+    	
+    	for (int i = 0; i < servers.size(); i++) {
+    		var ci = servers.get(i);
+    		System.out.println("CI #" + (i+1)
+    				+ "\nsysID=" + ci.getSysID() 
+    				+ "\nname=" + ci.getName()
+    				+ "\ninstallStatus=" + ci.getInstallStatus()
+    				+ "\napplicationSupportGroupSysID=" + ci.getApplicationSupportGroupSysID()
+    				+ "\nlocation=" + ci.getLocation()
+    				+ "\nisVirtual=" + ci.isVirtual());
+    		System.out.println("");
+    	}
+//    	
+//    	// get a single server from the CMDB
+//    	ConfigurationItem ciSolo = sn.getLinuxServer("960b19e3c3973614907af21f05013125");
+//    	System.out.println("Single item:\n" 
+//				+ "\nsysID=" + ciSolo.getSysID() 
+//				+ "\nname=" + ciSolo.getName()
+//				+ "\ninstallStatus=" + ciSolo.getInstallStatus()
+//				+ "\napplicationSupportGroupSysID=" + ciSolo.getApplicationSupportGroupSysID()
+//				+ "\nlocation=" + ciSolo.getLocation()
+//				+ "\nisVirtual=" + ciSolo.isVirtual());
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: APIException
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J;
+
+import java.net.URL;
+
+public class APIException extends Exception {
+
+	private static final long serialVersionUID = 353009900541790159L;
+	private URL url;
+	private int code;
+	
+	public APIException(String message, URL url, int code) {
+		super(message);
+		this.url = url;
+		this.code = code;
+	}
+	
+	public URL getURL() {
+		return url;
+	}
+	
+	public int getCode() {
+		return code;
+	}
+	
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: AssignmentGroup
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J;
+
+public class AssignmentGroup {
+	private final String sysID;		// sys_id of the assignment group in SN
+	private final String name;		// optional display name
+
+	// creates an assignment group with only a sys_id
+	public AssignmentGroup(String sysID) {
+		this(sysID, null);
+	}
+	
+	// creates an assignment group with sys_id and display name
+	public AssignmentGroup(String sysID, String name) {
+		if (sysID == null || sysID.isBlank()) {		// allows creation only if a sys_id is known
+			throw new IllegalArgumentException("AssignmentGroup sysID must not be null or empty");
+		}
+		
+		this.sysID = sysID;
+		this.name = name;
+	}
+	
+	public String getSysID() {
+		return sysID;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	// returns a human-readable string to represent the assignment group
+	@Override
+	public String toString() {
+		return name != null
+				? "AssignmentGroup{name='" + name + "', sysID='" + sysID + "'}"
+				: "AssignmentGroup{sysID='" + sysID + "'}";
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: HTTPMethod
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J;
+
+public enum HTTPMethod {
+	GET,		// Incident / CMDB lesen
+	POST,		// Incident erstellen
+	PUT,		// Daten ersetzen
+	PATCH,		// reopen und Worknote hinzufügen
+	DELETE;		// Daten löschen
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: Impact
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J;
+
+public enum Impact {
+	HIGH(1, "High"),
+	MEDIUM(2, "Medium"),
+	LOW(3, "Low");
+	
+	private int id;
+	private String name;
+	
+	Impact(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	
+	public int getID() {
+		return this.id;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public static Impact fromID(int id) {
+		if (id == 1) return HIGH;
+		if (id == 2) return MEDIUM;
+		return LOW;
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: Incident
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J;
+
+// inherits sysID & getSysID() from TableEntry
+public class Incident extends TableEntry {
+
+	private String incNumber;		// incident number (e.g. INC0012345)
+	private String state;			// current incident state (e.g. New, In Progress, Resolved, Closed)
+	private boolean active;			// indicates whether the incident is active or not
+	private String cmdbCiSysID;		// sys_id of the related configuration item (CI)
+	
+	// creates an incident with the given SN sys_id
+	public Incident(String sysID) {
+		super(sysID);		// super → calls the constructor of the parent class and passes the sysID
+	}
+	
+	// creates an incident with the given SN sys_id and incident number
+	public Incident(String sysID, String incNumber) {
+		super(sysID);
+		this.incNumber = incNumber;
+	}
+	
+	public String getIncNumber() {
+		return incNumber;
+	}
+	
+	public void setIncNumber(String IncNumber) {
+		this.incNumber = IncNumber;
+	}
+	
+	// getter//setter for state, active and cmdbCiSysID
+	public String getState() {
+		return state;
+	}
+	
+	public void setState(String state) {
+		this.state = state;
+	}
+	
+	public boolean isActive() {
+		return active;
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	public String getCmdbCiSysID() {
+		return cmdbCiSysID;
+	}
+	
+	public void setCmdbCiSysID(String cmdbCiSysID) {
+		this.cmdbCiSysID = cmdbCiSysID;
+	}
+	
+	// returns a human-readable representation of the incident
+	@Override
+	public String toString() {
+		return "Incident{" +
+			   "incNumber='" + incNumber + "'" +
+			   ", state'" + state + "'" +
+			   ", active='" + active + "'" +
+			   ", cmdbCiSysID='" + cmdbCiSysID + "'" +
+			   ", sysID='" + getSysID() + "'" +
+			   "}";
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: IOUtils
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Array;
+
+public class IOUtils{
+
+	/**
+	 * Gets the contents of an {@link InputStream} as a <code>byte[]</code>.
+	 * <p>
+	 * This method buffers the input internally, so there is no need to use a
+	 * {@link BufferedInputStream}.
+	 * 
+	 * @param input the {@link InputStream} to read from
+	 * @return the requested byte array
+	 * @throws IOException if an I/O error occurs
+	 */
+	public static byte[] toByteArray(InputStream input) throws IOException{
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		byte[] buffer = new byte[4096];
+		int n = 0;
+		while(-1 != (n = input.read(buffer))){
+			output.write(buffer, 0, n);
+		}
+		return output.toByteArray();
+	}
+	
+	public static <T> T concatArrays(T array1, T array2) {
+		if (!array1.getClass().isArray() || !array2.getClass().isArray()) {
+			throw new IllegalArgumentException("Only arrays are accepted.");
+		}
+		
+		Class<?> compType = array1.getClass().getComponentType();
+		if (!compType.equals(array2.getClass().getComponentType())) {
+			throw new IllegalArgumentException("Arrays have to be of same type.");
+		}
+		
+		int len1 = Array.getLength(array1);
+		int len2 = Array.getLength(array2);
+		
+		@SuppressWarnings("unchecked")
+		T result = (T) Array.newInstance(compType, len1 + len2);
+		
+		System.arraycopy(array1, 0, result, 0, len1);
+		System.arraycopy(array2, 0, result, len1, len2);
+		
+		return result;
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: ServiceNow
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J;
+
+import java.io.IOException;
+import java.io.ObjectInputFilter.Config;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import de.schoenn.ServiceNow4J.CMDB.ConfigurationItem;
+
+public class ServiceNow {
+
+	private final String endpoint;
+	private final String user, pass;
+
+	// creates a new SN client instance
+	// ssl certificate validation is disabled (test env?)
+	public ServiceNow(String endpoint, String user, String pass) {
+		this.endpoint = endpoint;
+		this.user = user;
+		this.pass = pass;
+		
+		// Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[] {(TrustManager) new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+                }
+                public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+                }
+            }
+        };
+ 
+        // Install the all-trusting trust manager
+        SSLContext sc = null;
+		try {
+			sc = SSLContext.getInstance("SSL");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+        try {
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+		} catch (KeyManagementException e) {
+			e.printStackTrace();
+		}
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+ 
+        // Create all-trusting host name verifier
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+ 
+        // Use the all-trusting host verifier
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+	}
+	
+	// retrieves an incident from SN by its sys_id
+	public Incident getIncident(String sysID) throws APIException {
+		// creates an empty Incident object (acts as a data container for the API response)
+		Incident incident = new Incident(sysID);
+		
+		try {
+			// initialize the HTTP client (prepare the REST connection to the SN Table API)
+			ServiceNowHttpsClient https = new ServiceNowHttpsClient(new URI(
+										  endpoint + "/api/now/table/incident/" + sysID),
+										  user, pass);
+
+			// execute the API call and receive the response
+			JSONObject response = https.getJSON();						// send the HTTP request and parse the JSON response
+			// extract the relevant data object
+			JSONObject result = response.getJSONObject("result");		// SN wraps the actual record inside the result object
+			
+			// map JSON fields to the incident object
+			incident.setIncNumber(result.optString("incNumber", null));
+			incident.setState(result.optString("state", null));
+			incident.setActive(result.optBoolean("active", false));
+			
+			System.out.println("Result: " + result.toString(2));
+			
+			
+			
+			if (result.optJSONObject("cmdb_ci") != null) {
+				incident.setCmdbCiSysID(result.getJSONObject("cmdb_ci").getString("value"));
+			}
+		} catch (IOException e) {			// handle technical I/O errors
+			e.printStackTrace();
+		} catch (URISyntaxException e) {		// handle invalid URI syntax errors
+			e.printStackTrace();
+		}
+		
+		return incident;
+	}
+	
+	// creates a new incident in SN
+	// builds a JSON payload with the required incident data,
+	// sends it to the SN Table API and maps the response
+	// to a newly created Incident object
+	public Incident createIncident(
+			String shortDescription,
+			String description,
+			ConfigurationItem ci,
+			AssignmentGroup group,
+			Impact impact,
+			Urgency urgency,
+			String caller) throws APIException{
+		// initialize the return object
+		Incident incident = null;
+		
+		try {								
+			// build the JSON payload for the API request (prepare all required fields for incident creation)			
+			JSONObject payload = new JSONObject();
+			payload.put("short_description", shortDescription);
+			payload.put("description", description);
+			payload.put("cmdb_ci", ci.getSysID());
+			payload.put("contact_type", "u_interface");
+			
+			if (group != null) {
+				payload.put("assignment_group", group.getSysID());
+			}
+
+			payload.put("impact", impact.getID());
+			payload.put("urgency", urgency.getID());
+			payload.put("caller_id", caller);
+			
+			// initialize the HTTP client for the POST request (prepare the REST connection to create a new incident)
+			ServiceNowHttpsClient https =
+					new ServiceNowHttpsClient(
+							new URI(endpoint + "/api/now/table/incident"),
+							user,
+							pass,
+							HTTPMethod.POST,
+							new java.util.HashMap<>(),
+							payload);
+			
+			// execute the API call and receive the response
+			JSONObject response = https.getJSON();						// send the incident data to SN and parse the response
+			// extract the created incident data
+			JSONObject result = response.getJSONObject("result");		// SN returns the created record inside the result object
+			
+			// map JSON fields to the Incident object 
+			incident = new Incident(
+					result.getString("sys_id"),
+					result.getString("number"));			
+		} catch (IOException e){					// handle technical I/O errors
+			e.printStackTrace();
+		} catch (URISyntaxException e){			// handle invalid URI syntax errors
+			e.printStackTrace();
+		}
+		
+		return incident;
+	}
+	
+	// adds a worknote to an existing incident in SN
+	public void addWorkNote(String sysID, String workNote) {
+		try {
+			// build the JSON payload (define worknote-content to be added to the incident)
+			JSONObject payload = new JSONObject(); 
+			payload.put("work_notes", workNote);
+			
+			// initialize the HTTP client (prepare the REST connection to update an existing incident)
+			ServiceNowHttpsClient https = new ServiceNowHttpsClient(
+					new URI(endpoint + "/api/now/table/incident/" + sysID),
+					user,
+					pass,
+					HTTPMethod.PATCH,
+					new java.util.HashMap<>(),
+					payload);
+			
+			// execute the API call (send the PATCH request to SN)
+			https.getJSON();
+			
+		} catch (IOException e){				// handle technical I/O errors
+			e.printStackTrace();
+		} catch (URISyntaxException e){		// handle invalid URI syntax errors
+			e.printStackTrace();
+		} catch (APIException e) {			// handle APIExeption
+			e.printStackTrace();
+		}
+	}
+	
+	// reopens an existing incident in SN and adds a worknote
+	public void reopenIncident(String sysID, String workNote) throws APIException {
+		try {
+			// build the JSON payload (define the new incident state and the accompanying worknote)
+			JSONObject payload = new JSONObject();
+			payload.put("state", "2");				// EXAMPLE: "In Progress"
+			payload.put("work_notes", workNote);
+			
+			// initialize the HTTP client (prepare REST connection to update an existing incident)
+			ServiceNowHttpsClient https = new ServiceNowHttpsClient(
+					new URI(endpoint + "/api/now/table/incident/" + sysID),
+					user,
+					pass,
+					HTTPMethod.PATCH,
+					new java.util.HashMap<>(),
+					payload);
+			
+			// execute the API call (send the PATCH request to SN to reopen the incident)
+			https.getJSON();
+			
+		} catch (IOException e){				// handle technical I/O errors
+			e.printStackTrace();
+		} catch (URISyntaxException e){		// handle invalid URI syntax errors
+			e.printStackTrace();
+		}
+	}
+	
+	// retrieves a Linux server CI from the ServiceNow CMDB by sys_id
+	// table: cmdb_ci_linux_server
+	public ConfigurationItem getLinuxServer(String sysID) throws APIException {
+		ConfigurationItem ci = new ConfigurationItem(sysID);
+		
+		try {
+			ServiceNowHttpsClient https = new ServiceNowHttpsClient(new URI(
+					  endpoint + "/api/now/table/cmdb_ci_linux_server/" + sysID),
+					  user, pass);
+			
+			JSONObject response = https.getJSON();
+			JSONObject result = response.getJSONObject(sysID);
+			
+			// fill CI fields from JSON
+			ci.fromJSON(result);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
+		return ci;
+	}
+	
+	// retrieves Linux server CIs from the ServiceNow CMDB
+	public List<ConfigurationItem> getLinuxServers(String sysparmQuery, int limit) throws APIException {
+		List<ConfigurationItem> resultList = new ArrayList<>();
+		
+		try {
+			// Build query arguments
+			HashMap<String, String> args = new HashMap<>();
+			
+			// optional query filter (ServiceNow sysparam_query)
+			if (sysparmQuery != null && !sysparmQuery.isBlank()) {
+				args.put("sysparam_query", sysparmQuery);
+			}
+			
+			// optional limit
+			if (limit > 0) {
+				args.put("sysparm_limit", String.valueOf(limit));
+			}
+			
+			// OPTIONAL: only fetch the fields we actually need (performance + clarity)
+//			args.put("sysparm_fields", "sys_id,name,install_status,location,is_virtual,application_support_group");
+			args.put("sysparm_display_value", "all");
+			
+			ServiceNowHttpsClient https = new ServiceNowHttpsClient(new URI(
+					  endpoint + "/api/now/table/cmdb_ci_linux_server"),
+					  user, pass, HTTPMethod.GET, args);
+			
+			JSONObject response = https.getJSON();
+			
+			// "result" is an array for list calls
+			org.json.JSONArray arr = response.getJSONArray("result");
+			
+			for (int i = 0; i < arr.length(); i++) {
+				JSONObject row = arr.getJSONObject(i);
+				
+				String sysID = row.optString("sys_id", null);
+				if (sysID == null) continue;
+
+				// TEST
+				System.out.println("TESTDATENSATZ " + (i+1));
+				System.out.println(row.toString(2));
+				
+				ConfigurationItem ci = new ConfigurationItem(sysID);
+				ci.fromJSON(row);
+				resultList.add(ci);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
+		return resultList;
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: ServiceNowHttpsClient
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import org.json.JSONObject;
+
+public class ServiceNowHttpsClient{
+
+	private final URL					url;
+	private final String				user, pass;
+	private final HTTPMethod			method;
+	private final Map<String, String>	args;
+	private final JSONObject			payload;
+	private int							responseCode	= -1;
+	private byte[]						content;
+
+	// convenience constructor (default get) (allows simple GET requests without specifying method/args/payload)
+	public ServiceNowHttpsClient(URI uri, String user, String pass) throws IOException {
+		this(uri, user, pass, HTTPMethod.GET, new HashMap<String, String>());
+	}
+
+	// convenience constructor (method + args, empty payload) (allows requests with query parameters but without a JSON body)
+	public ServiceNowHttpsClient(URI uri, String user, String pass, HTTPMethod method, Map<String, String> args) throws IOException {
+		this(uri, user, pass, method, args, new JSONObject());
+	}
+	
+	// full constructor
+	// stores all required request data (URL, credentials, method, query args and payload)
+	public ServiceNowHttpsClient(URI uri, String user, String pass, HTTPMethod method, Map<String, String> args, JSONObject payload) throws IOException {
+		this.url = uri.toURL();
+		this.user = user;
+		this.pass = pass;
+		this.method = method;
+		this.args = args;
+		this.payload = payload;
+	}
+
+	// core request execution method (builds final URL (incl. query parameters), sends the HTTPS request
+	// and reads the response (or error) content
+	private void getContent() throws IOException, APIException {
+		URL url = this.url;				// build final URL (SN requests require angular=true + optional query args)
+//		args.put("angular", "true");	// ensure args map exists and add required SN parameter
+		
+		// build query string safely (no substring issues if args is empty)
+		if(args != null && !args.isEmpty()) {
+			String rawArgs = "";			
+			
+			for(String key : args.keySet())
+				rawArgs += (key + "=" + URLEncoder.encode(args.get(key), "UTF-8") + "&");
+			
+			rawArgs = rawArgs.substring(0, rawArgs.length() - 1);
+			
+			try {
+				url = new URI(this.url.toString() + "?" + rawArgs).toURL();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// retry mechanism for unstable connections (increase robustness for temporary network issues)
+		int connectErrors = 0;
+		
+		while(connectErrors < 3){
+			try{
+				System.out.println(method + " " + url.toString());
+				
+				// open HTTPS connection and configure request (set timeouts, headers, HTTP method and authentication)
+				HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+				conn.setConnectTimeout(5000);
+				conn.setDoInput(true);
+				conn.setDoOutput(true);
+
+				// only enable Output for methods that can send a body
+				boolean sendsBody = (method == HTTPMethod.POST || method == HTTPMethod.PUT || method == HTTPMethod.PATCH);
+				conn.setUseCaches(false);
+				
+				conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+				conn.setRequestProperty("Content-Type", "application/json");
+				conn.setRequestProperty("Accept", "application/json");
+				
+				if (method == HTTPMethod.PATCH) {
+					conn.setRequestMethod("POST");
+					conn.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+				} else {
+					conn.setRequestMethod(method.name());
+				}
+				// Basic Authentication (SN instance is accessed using a technical user)
+				String token = user + ":" + pass;
+				token = new String(Base64.getEncoder().encode(token.getBytes()));
+				conn.setRequestProperty("Authorization", "Basic " + token);
+				
+				// write JSON payload for body-sending methods
+				// POST creates records, PATCH/PUT updates records (e.g. worknotes, state)
+				if (sendsBody) {
+					OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream(), StandardCharsets.UTF_8);
+					writer.write(payload.toString());
+					writer.close();
+				} else {
+					conn.connect();
+				}
+				
+				// read response code and handle success/error responses
+				responseCode = conn.getResponseCode();
+				
+				if (responseCode >= HttpsURLConnection.HTTP_BAD_REQUEST) {
+					// error handling (read error stream and throw APIException containing status and message
+					content = IOUtils.toByteArray(conn.getErrorStream());
+					
+					// SN often returns a JSON object with "message" or error details
+					JSONObject errorJSON = new JSONObject(new String(content, StandardCharsets.UTF_8));
+					throw new APIException(errorJSON.optString("message", "Unknown Error"), url, responseCode);
+				} else {
+					// success handling (read the response body (JSON))
+					content = IOUtils.toByteArray(conn.getInputStream());
+				}
+				
+				conn.disconnect();
+				return;
+			} catch(IOException e) {		// retry behavior on IO errors
+				connectErrors++;
+				if(connectErrors >= 3){
+					throw e;
+				}
+			}
+		}
+	}
+	
+	// expose last HTTP status code (allows callers to inspect the result of the last request)
+	public int getResponseCode() {
+		return this.responseCode;
+	}
+
+	// parse response content as JSON 
+	// executes the HTTP call (if not already done) and returns the response as JSON object
+	public JSONObject getJSON() throws IOException, APIException {
+		if(responseCode == -1) getContent();
+		
+		// if content is empty for some operations, return an empty JSON object instead of crashing
+		if (content == null || content.length == 0) return new JSONObject();
+		
+		return new JSONObject(new String(content));
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: TableEntry
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J;
+
+public class TableEntry {
+
+	private String sysID;
+	
+	public TableEntry(String sysID) {
+		this.sysID = sysID;
+	}
+
+	public String getSysID() {
+		return sysID;
+	}
+
+	public void setSysID(String sysID) {
+		this.sysID = sysID;
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: Urgency
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J;
+
+public enum Urgency {
+
+	HIGH(1, "High"),
+	MEDIUM(2, "Medium"),
+	LOW(3, "Low");
+	
+	private int id;
+	private String name;
+	
+	Urgency(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	
+	public int getID() {
+		return this.id;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public static Urgency fromID(int id) {
+		if (id == 1) return HIGH;
+		if (id == 2) return MEDIUM;
+		return LOW;
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: ConfigurationItem
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J.CMDB;
+
+import org.json.JSONObject;
+import de.schoenn.ServiceNow4J.TableEntry;
+
+public class ConfigurationItem extends TableEntry {
+	
+	// SN-Filter: cmdb_ci.list
+	
+	// relevant CI fields for the project
+	private String name;
+	private String applicationSupportGroupSysID;
+	private InstallStatus installStatus;
+	private String location;
+	private boolean isVirtual;
+//	private String purpose;		// Erstmal nur eine Idee, könnte in die Description aufgenommen werden
+
+	public ConfigurationItem(String sysID) {
+		super(sysID);
+		// TODO Auto-generated constructor stub
+	}
+	
+	// getters
+	public String getName(){
+		return name;
+	}
+
+	public String getApplicationSupportGroupSysID() {
+		return applicationSupportGroupSysID;
+	}
+
+	public InstallStatus getInstallStatus() {
+		return installStatus;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public boolean isVirtual() {
+		return isVirtual;
+	}
+
+	// setters
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setApplicationSupportGroupSysID(String applicationSupportGroup) {
+		this.applicationSupportGroupSysID = applicationSupportGroup;
+	}
+
+	public void setInstallStatus(InstallStatus installStatus) {
+		this.installStatus = installStatus;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public void setVirtual(boolean isVirtual) {
+		this.isVirtual = isVirtual;
+	}
+	
+	// JSON mapping:
+	
+	// populates this CI with values from a SN CMDB JSON record
+	public void fromJSON(JSONObject result) {
+		if (result == null) return;
+		
+		// simple string fields (depending on the instance, field names may differ)
+		this.name = extractValueAsString(result, "name");
+		this.location = extractReferenceDisplayValue(result, "location");
+		this.isVirtual = extractReferenceBooleanValue(result, "virtual");
+		
+		// enum for install_status
+		String rawStatus = result.optString("install_status", null);
+		this.installStatus = InstallStatus.fromID(rawStatus);
+		
+		// reference field: application_support_group
+		this.applicationSupportGroupSysID = extractReferenceSysID(result, "u_application_support_group");
+	}
+	
+	// extracs the sys_id ("value") from a SN reference field
+	// SN often returns a reference fields like: "application_support_group": { "link": "...", "value": "sysID" }
+	private String extractReferenceSysID(JSONObject result, String fieldName) {
+		if (!result.has(fieldName)) return null;
+		
+		Object raw = result.opt(fieldName);
+		if (raw instanceof JSONObject) {
+			return ((JSONObject) raw).optString("value", null);
+		}
+		
+		// if it's already returned as a String
+		if (raw instanceof String) {
+			return (String) raw;
+		}
+		
+		return null;
+	}
+	
+	// extracts a readable string from a field that might be:
+	// plain string OR a reference object with "display_value"/"value"
+	// use this if the instance returns location as an object
+	private String extractReferenceValueAsString(JSONObject result, String fieldName) {
+		if (!result.has(fieldName)) return null;
+		
+		Object raw = result.opt(fieldName);
+		
+		if (raw instanceof JSONObject) {
+			JSONObject obj = (JSONObject) raw;
+			
+			// if the instance is using "display_value", prefere that:
+			String display = obj.optString("display_value", null);
+			
+			if (display != null && !display.isBlank()) return display;
+			
+			// otherwise fall back to the raw value:
+			return obj.optString("value", null);
+		}
+		
+		if (raw instanceof String) {
+			return (String) raw;
+		}
+		
+		return null;
+	}
+	
+	private String extractReferenceDisplayValue(JSONObject result, String fieldName) {
+		if (!result.has(fieldName)) return null;
+		
+		Object raw = result.opt(fieldName);
+		
+		if (raw instanceof JSONObject) {
+			JSONObject obj = (JSONObject) raw;
+			return obj.optString("display_value", null);
+		}
+		
+		if (raw instanceof String) {
+			return (String) raw;
+		}
+		
+		return null;
+	}
+	
+	private boolean extractReferenceBooleanValue(JSONObject result, String fieldName) {
+		if (!result.has(fieldName)) return false;
+		
+		Object raw = result.opt(fieldName);
+		
+		if (raw instanceof JSONObject) {
+			JSONObject obj = (JSONObject) raw;
+			String value = obj.optString("value", "false");
+			return Boolean.parseBoolean(value);
+		}
+		
+		if (raw instanceof String) {
+			return Boolean.parseBoolean((String) raw);
+		}
+		
+		if (raw instanceof Boolean) {
+			return (Boolean) raw;
+		}
+		
+		return false;
+	}
+	
+	private String extractValueAsString(JSONObject result, String fieldName) {
+		if (!result.has(fieldName)) return null;
+		
+		Object raw = result.opt(fieldName);
+		
+		// case 1: SN returned object with value/display_value
+		if (raw instanceof JSONObject) {
+			JSONObject obj = (JSONObject) raw;
+			return obj.optString("value", null);
+		}
+		
+		// case 2: SN returned plain string
+		if (raw instanceof String) {
+			return (String) raw;
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public String toString() {
+		return "ConfigurationItem{sysID=" + getSysID()
+		+ ", name=" + name
+		+ ", installStatus=" + installStatus
+		+ ", location=" + location
+		+ ", isVirtual=" + isVirtual
+		+ "}";
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: InstallStatus
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J.CMDB;
+
+// Doc: The InstallStatus enum was introduced to represent the internal SN CI states in a type-safe manner.
+//		Instead of using raw strings, this approach ensures compile-time safety and clean business logic branching.
+
+public enum InstallStatus {
+//	ABSENT("Absent"),
+//	IN_MAINTENANCE("In Maintenance"),
+//	IN_STOCK("In Stock"),
+//	INSTALLED("Installed"),
+//	ON_ORDER("On Order"),
+//	PENDING_INSTALL("Pending Install"),
+//	PENDING_REPAIR("Pending Repair"),
+//	RETIRED("Retired"),
+//	STOLE("Stole");
+	INSTALLED("1", "Installed"),
+	ON_ORDER("2", "On Order"),
+	IN_STOCK("3", "In Stock"),
+	PENDING_INSTALL("4", "Pending Install"),
+	PENDING_REPAIR("5", "Pending Repair"),
+	IN_MAINTENANCE("6", "In Maintenance"),
+	RETIRED("7", "Retired"),
+	STOLE("8", "Stole"),
+	ABSENT("100", "Absent");
+	
+	public String id;
+	public String displayValue;
+	
+	InstallStatus(String id, String displayValue) {
+		this.id = id;
+		this.displayValue = displayValue;
+	}
+	
+	// getters
+	
+	public String getID() {
+		return this.id;
+	}
+	
+	public String getDisplayValue() {
+		return this.displayValue;
+	}
+	
+	// parses a SN string value into the corresponding enum
+	// useful when reading CI data from the SN API
+	public static InstallStatus fromID(String id) {
+		if (id == null) return null;
+		
+		String cleanedID = id.trim();
+		
+		for (InstallStatus status : values()) {
+			if (status.getID().equals(cleanedID)) {
+				return status;
+			}
+		}
+		
+		return null;
+	}
+	
+	// returns the readable label for logging + debugging
+	@Override
+	public String toString() {
+		return id;
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------
+Class: LinuxServer
+------------------------------------------------------------------------------------------------------------------------------------
+package de.schoenn.ServiceNow4J.CMDB;
+
+public class LinuxServer extends ConfigurationItem {
+
+	public LinuxServer(String sysID) {
+		super(sysID);
+		// TODO Auto-generated constructor stub
+	}
+
+//	public LinuxServer() {
+//		// TODO Auto-generated constructor stub
+//	}
+
+}
+
+------------------------------------------------------------------------------------------------------------------------------------
